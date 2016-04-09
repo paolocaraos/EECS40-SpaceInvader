@@ -19,7 +19,6 @@ public class Player {
     public final int MAX_AMMO = 5;
 
     public int moveDirection;
-
     public int position_x;
     public final int position_y = 1450;
     public final int radius = 50;

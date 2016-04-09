@@ -41,7 +41,6 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
         setFocusable(true);
 
         //Initialize game state variables
-        player = new Player(600, 1000);
         canvas = new Canvas();
     }
 
