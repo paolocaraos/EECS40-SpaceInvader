@@ -1,6 +1,8 @@
 package com.example.paolo.spaceinvaders;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
@@ -29,6 +31,7 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
     public final int UP = -1;
 
     private Player player;
+    private Bitmap playericon;
 
     Canvas canvas;
 
@@ -64,13 +67,13 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
         this.screen_height = getHeight();
         this.moveControl_upperBound = (this.screen_height) / 3;
 
-        player = new Player(this.screen_width, this.screen_height);
+        playericon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        player = new Player(this.screen_width, this.screen_height, playericon);
         playerThread = new GameThread(this);
         playerThread.start();
 
         for(int i = 0; i < playerBullet.length; i++)
             playerBullet[i] = new Projectile(this.screen_height);
-
     }
 
     @Override

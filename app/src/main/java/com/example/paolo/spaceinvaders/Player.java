@@ -1,8 +1,10 @@
 package com.example.paolo.spaceinvaders;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
 
 /**
@@ -16,8 +18,6 @@ public class Player {
     final int LEFT  = -1;
     final int STOP = 3;
 
-    public final int MAX_AMMO = 5;
-
     public int moveDirection;
     public int position_x;
     public final int position_y = 1450;
@@ -25,9 +25,12 @@ public class Player {
 
     private final int dx;
 
-    public Player(int screenX, int screenY) {
+    Bitmap playericon;
+
+    public Player(int screenX, int screenY, Bitmap icon) {
         position_x = 600;
         dx = 50;
+        playericon = icon;
 
         moveDirection = 0;
 
@@ -40,7 +43,11 @@ public class Player {
     void draw(Canvas canvas){
         Paint paint = new Paint();
         paint.setColor(Color.YELLOW);
+
+        Rect coordinates = new Rect();
+        coordinates.set(position_x - radius, position_y - radius, position_x + radius, position_y + radius);
         canvas.drawCircle(position_x, position_y, radius, paint);
+        canvas.drawBitmap(playericon,null,coordinates,null);
     }
 
     void update(){
