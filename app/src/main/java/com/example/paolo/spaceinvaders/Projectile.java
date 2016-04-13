@@ -28,7 +28,7 @@ public class Projectile {
         isActive = false;
 
         ammoPaint = new Paint();
-        ammoPaint.setColor(Color.YELLOW);
+        ammoPaint.setColor(Color.WHITE);
     }
 
     void draw(Canvas canvas, int gunPoint_offset) {

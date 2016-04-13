@@ -31,7 +31,9 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
     public final int UP = -1;
 
     private Player player;
+    private Enemy[] enemy = new Enemy[20];
     private Bitmap playericon;
+    private Bitmap[] enemyicon = new Bitmap[20];
 
     Canvas canvas;
 
@@ -57,6 +59,11 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
             playerBullet[i].draw(canvas, player.radius);
             playerBullet[i].update();
         }
+
+        for(int i = 0; i < enemy.length; i++){
+            enemy[i].draw(canvas);
+            enemy[i].update();
+        }
     }
 
     @Override
@@ -68,6 +75,10 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
         this.moveControl_upperBound = (this.screen_height) / 3;
 
         playericon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        for(int i = 0; i < enemyicon.length; i++){
+            enemyicon[i] = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+            enemy[i] = new Enemy(i, this.screen_width, this.screen_height, enemyicon[i]);
+        }
         player = new Player(this.screen_width, this.screen_height, playericon);
         playerThread = new GameThread(this);
         playerThread.start();
