@@ -3,6 +3,7 @@ package com.example.paolo.spaceinvaders;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
 
 /**
@@ -14,13 +15,15 @@ public class Projectile {
 
     public int trajectory;
 
-    public final int bulletSpeed = 100;
+    public final int bulletSpeed = 60;
     public boolean isActive;
-    public final int bulletRadius = 15;
+    public final int bulletRadius = 20;
 
     int x, y;
 
     Paint ammoPaint;
+
+    Rect bulletSpace;
 
     public Projectile(int UpperBound) {
         this.screenLowerBound = 0;
@@ -32,18 +35,23 @@ public class Projectile {
     }
 
     void draw(Canvas canvas, int gunPoint_offset) {
-        if(isActive)
-            canvas.drawCircle(x, y - gunPoint_offset, bulletRadius, ammoPaint);
+        if(isActive) {
+            bulletSpace = new Rect(x - bulletRadius, y - gunPoint_offset - bulletRadius, x + bulletRadius, y - gunPoint_offset + bulletRadius);
+            canvas.drawRect(bulletSpace, ammoPaint);
+        }
     }
 
-    void update(){
+    void update(Rect enemyRect){
         if(isActive){
             y = y + bulletSpeed * this.trajectory;
 
             Log.d("Log.DEBUG", "screenLower = " + screenLowerBound + "bullet y position = " + y);
 
-            if(y > screenUpperBound || y < screenLowerBound)
+            if(y > screenUpperBound || y < screenLowerBound) {
                 isActive = false;
+            }else{
+                bulletSpace.intersects(bulletSpace, enemyRect);
+            }
         }
     }
 

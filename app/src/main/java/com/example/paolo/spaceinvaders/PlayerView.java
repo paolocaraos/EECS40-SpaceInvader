@@ -21,12 +21,10 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
     private int screen_height;
     private int moveControl_upperBound;
 
-    private GameThread gThread;
     private GameThread playerThread;
-    private GameThread inputThread;
 
     private Projectile[] playerBullet = new Projectile[10];
-    private Projectile[] enemyBullet;
+    private Projectile[] enemyBullet  = new Projectile[100];
     public final int DOWN = 1;
     public final int UP = -1;
 
@@ -53,16 +51,35 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
         canvas.drawColor(Color.BLACK);
 
         player.draw(canvas);
-        player.update();
-
         for(int i = 0; i < playerBullet.length; i++) {
             playerBullet[i].draw(canvas, player.radius);
-            playerBullet[i].update();
         }
-
+        //Check enemy states
+        for(int i = 0; i < enemy.length; i++){
+            if(enemy[i].checkNextState())
+                break;
+        }//Draw
         for(int i = 0; i < enemy.length; i++){
             enemy[i].draw(canvas);
+        }
+
+        //Check for collisions
+
+
+        //Update all elements
+        player.update();
+        for(int i = 0; i < playerBullet.length; i++) {
+            for(int j = 0; i < enemy.length; i++) {
+                playerBullet[i].update(enemy[j].getRect());
+            }
+        }
+        for(int i = 0; i < enemy.length; i++){
             enemy[i].update();
+        }
+        for(int i = 0; i < enemy.length; i++){
+            if(enemy[i].postUpdate()){
+                break;
+            }
         }
     }
 
@@ -95,7 +112,7 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder){
-        gThread.interrupt();
+        playerThread.interrupt();
     }
 
 
