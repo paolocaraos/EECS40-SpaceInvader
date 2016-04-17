@@ -47,15 +47,17 @@ public class Projectile {
 
             Log.d("Log.DEBUG", "screenLower = " + screenLowerBound + "bullet y position = " + y);
 
-            for(int i = 0; i < enemies.length; i++) {
                 if (y > screenUpperBound || y < screenLowerBound) {
                     isActive = false;
                 } else {
-                    if(bulletSpace.intersects(bulletSpace, enemies[i].getRect())){
-                        isActive = false;
-                        enemies[i].isAlive = false;
-                    }
-
+                    for(int i = 0; i < enemies.length; i++) {
+                        if(enemies[i].isAlive) {
+                            if (bulletSpace.intersects(bulletSpace, enemies[i].getRect())) {
+                                Log.d("Log.DEBUG", "Bullet " + "Hit Alien " + i);
+                                isActive = false;
+                                enemies[i].isAlive = false;
+                            }
+                        }
                 }
             }
         }

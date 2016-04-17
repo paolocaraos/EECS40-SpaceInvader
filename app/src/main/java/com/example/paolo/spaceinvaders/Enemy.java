@@ -25,7 +25,7 @@ public class Enemy{
 
     int x, start_x;
     int y, start_y;
-    int dx = 10;
+    int dx;
     int dy;
 
     int screen_X, screen_Y;
@@ -37,6 +37,7 @@ public class Enemy{
     public Enemy(int offset, int screenX, int screenY, Bitmap icon, int enemyLength){
         isAlive = true;
 
+        dx = 10;
         dy = 2 * radius;
 
         int columns = enemyLength/4;
