@@ -9,6 +9,8 @@ import android.graphics.Rect;
  */
 public class Enemy{
 
+    boolean isMother;
+
     final int RIGHT = 1;
     final int LEFT  = -1;
     final int DOWN = 2;
@@ -19,6 +21,8 @@ public class Enemy{
     static boolean isOutOfBoundsRight;
     static int horizDirection;
     static boolean dropping;
+
+    static int waveNumber = 0;
 
     boolean isAlive;
 
@@ -33,8 +37,25 @@ public class Enemy{
 
     public Rect enemySpace =  new Rect();
 
+    public Enemy(Bitmap motherShipIcon, int screenX, int screenY){
+        isAlive = false;
+        isMother = true;
+
+        x = 50;
+        y = 50;
+
+        dx = 15;
+        dy = 0;
+
+        enemyicon = motherShipIcon;
+
+        screen_X = screenX;
+        screen_Y = screenY;
+    }
+
     public Enemy(int offset, int screenX, int screenY, Bitmap icon, int enemyLength){
         isAlive = true;
+        isMother = false;
 
         dx = 10;
         dy = 2 * radius;
@@ -85,18 +106,45 @@ public class Enemy{
 
     void update(Player player){
         if(isAlive) {
-            if (isOutOfBoundsRight || isOutOfBoundsLeft) {
+             if (isOutOfBoundsRight || isOutOfBoundsLeft) {
                 y = y + dy;
                 dropping = true;
-            } else if (horizDirection == RIGHT) {
+             } else if (horizDirection == RIGHT) {
                 x = x + dx;
-            } else if (horizDirection == LEFT) {
+             } else if (horizDirection == LEFT) {
                 x = x - dx;
-            }
-            if (y > player.position_y - player.radius){
+             }
+             if (y > player.position_y - player.radius) {
                 player.isAlive = false;
+             }
+        }
+    }
+
+    void update(){
+        if(isAlive){
+            x = x + dx;
+            if(x > screen_X){
+                isAlive = false;
             }
         }
+    }
+
+    /*for mothership*/
+    void spawn(){
+        isAlive = true;
+        x = 50;
+        y = 50;
+    }
+
+    /*for regular aliens*/
+    void spawn(int offset, int enemyLength){
+        isAlive = true;
+        int columns = enemyLength/4;
+
+        x = 220 + 100*(offset % columns);
+        y = 220 + 100*(offset / columns);
+
+        dx += 5*waveNumber;
     }
 
     boolean postUpdate() {

@@ -41,12 +41,10 @@ public class Projectile {
         }
     }
 
-    void update(Enemy[] enemies){
+    /*Return true if bullets hits*/
+    boolean update(Enemy[] enemies){
         if(isActive){
             y = y + bulletSpeed * this.trajectory;
-
-            Log.d("Log.DEBUG", "screenLower = " + screenLowerBound + "bullet y position = " + y);
-
                 if (y > screenUpperBound || y < screenLowerBound) {
                     isActive = false;
                 } else {
@@ -56,11 +54,32 @@ public class Projectile {
                                 Log.d("Log.DEBUG", "Bullet " + "Hit Alien " + i);
                                 isActive = false;
                                 enemies[i].isAlive = false;
+                                return true;
                             }
                         }
                 }
             }
         }
+        return false;
+    }
+
+    boolean update(Enemy enemy){
+        if(isActive){
+            y = y + bulletSpeed * this.trajectory;
+            if (y > screenUpperBound || y < screenLowerBound) {
+                isActive = false;
+            } else {
+                if(enemy.isAlive) {
+                    if (bulletSpace.intersects(bulletSpace, enemy.getRect())) {
+                        Log.d("Log.DEBUG", "Bullet " + "Hit Alien ");
+                        isActive = false;
+                        enemy.isAlive = false;
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     void shoot(int shooter_x, int shooter_y, int traj){

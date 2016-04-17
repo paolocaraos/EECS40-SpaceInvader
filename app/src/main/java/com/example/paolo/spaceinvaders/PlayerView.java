@@ -11,7 +11,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.TextView;
+
+import java.util.Random;
 
 /**
  * Created by Paolo on 4/5/2016.
@@ -19,8 +20,6 @@ import android.widget.TextView;
 public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
 
     Context context;
-
-    private TextView textView;
 
     private int screen_width;
     private int screen_height;
@@ -35,6 +34,8 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
 
     private Player player;
     private Enemy[] enemy = new Enemy[20];
+    private Enemy motherShip;
+    private Bitmap motherIcon;
     private Bitmap playericon;
     private Bitmap[] enemyicon = new Bitmap[20];
 
@@ -69,21 +70,38 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
         for(int i = 0; i < enemy.length; i++){
             enemy[i].draw(canvas);
         }
-
-        //Check for collisions
-
+        motherShip.draw(canvas);
 
         //Update all elements
         player.update();
         for(int i = 0; i < playerBullet.length; i++) {
-            playerBullet[i].update(enemy);
+            if(playerBullet[i].update(enemy)){
+                player.killScore += 1;
+            }
+            playerBullet[i].update(motherShip);
         }
         for(int i = 0; i < enemy.length; i++){
             enemy[i].update(player);
         }
+        motherShip.update();
         for(int i = 0; i < enemy.length; i++){
             if(enemy[i].postUpdate()){
                 break;
+            }
+        }
+
+        if(motherShip.isAlive == false){
+            Random r = new Random();
+            int motherSpawnScore = r.nextInt(500 - 0) + 0;
+            Log.d("Log.DEBUG", "Spawn score = " + motherSpawnScore);
+            if(motherSpawnScore == 15)
+                motherShip.spawn();
+        }
+        if(player.killScore == enemy.length){
+            player.killScore = 0;
+            enemy[0].waveNumber++;
+            for(int i = 0; i < enemy.length; i++){
+                enemy[i].spawn(i, enemy.length);
             }
         }
 
@@ -96,6 +114,8 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
         }
     }
 
+
+
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
 
@@ -105,11 +125,13 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
         this.moveControl_upperBound = (this.screen_height) / 3;
 
         playericon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        motherIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         for(int i = 0; i < enemy.length; i++){
             enemyicon[i] = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
             enemy[i] = new Enemy(i, this.screen_width, this.screen_height, enemyicon[i], enemy.length);
         }
         player = new Player(this.screen_width, this.screen_height, playericon);
+        motherShip = new Enemy(motherIcon, this.screen_width, this.screen_height);
         playerThread = new GameThread(this);
         playerThread.start();
 

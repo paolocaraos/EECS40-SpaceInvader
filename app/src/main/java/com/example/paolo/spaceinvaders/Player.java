@@ -14,6 +14,8 @@ public class Player {
 
     public boolean isAlive;
 
+    public int killScore = 0;
+
     int screenBound_x, screenBound_y;
 
     final int RIGHT = 1;
