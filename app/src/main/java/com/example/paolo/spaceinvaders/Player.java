@@ -12,6 +12,8 @@ import android.util.Log;
  */
 public class Player {
 
+    public boolean isAlive;
+
     int screenBound_x, screenBound_y;
 
     final int RIGHT = 1;
@@ -28,6 +30,8 @@ public class Player {
     Bitmap playericon;
 
     public Player(int screenX, int screenY, Bitmap icon) {
+        isAlive = true;
+
         position_x = 600;
         dx = 50;
         playericon = icon;
@@ -41,13 +45,15 @@ public class Player {
     }
 
     void draw(Canvas canvas){
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
+        if(isAlive) {
+            Paint paint = new Paint();
+            paint.setColor(Color.WHITE);
 
-        Rect coordinates = new Rect();
-        coordinates.set(position_x - radius, position_y - radius, position_x + radius, position_y + radius);
-        canvas.drawCircle(position_x, position_y, radius + 10, paint);
-        canvas.drawBitmap(playericon,null,coordinates,null);
+            Rect coordinates = new Rect();
+            coordinates.set(position_x - radius, position_y - radius, position_x + radius, position_y + radius);
+            canvas.drawCircle(position_x, position_y, radius + 10, paint);
+            canvas.drawBitmap(playericon, null, coordinates, null);
+        }
     }
 
     void update(){

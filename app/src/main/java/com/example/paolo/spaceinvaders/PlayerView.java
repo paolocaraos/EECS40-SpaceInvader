@@ -5,11 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 
 /**
  * Created by Paolo on 4/5/2016.
@@ -17,6 +19,8 @@ import android.view.SurfaceView;
 public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
 
     Context context;
+
+    private TextView textView;
 
     private int screen_width;
     private int screen_height;
@@ -75,12 +79,20 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
             playerBullet[i].update(enemy);
         }
         for(int i = 0; i < enemy.length; i++){
-            enemy[i].update();
+            enemy[i].update(player);
         }
         for(int i = 0; i < enemy.length; i++){
             if(enemy[i].postUpdate()){
                 break;
             }
+        }
+
+        if(player.isAlive == false){
+            Paint gameOverPaint = new Paint();
+            canvas.drawPaint(gameOverPaint);
+            gameOverPaint.setColor(Color.WHITE);
+            gameOverPaint.setTextSize(180);
+            canvas.drawText("Game Over", canvas.getWidth() / 8 - 50, (canvas.getHeight() / 2) - ((gameOverPaint.descent()+ gameOverPaint.ascent())/2), gameOverPaint );
         }
     }
 

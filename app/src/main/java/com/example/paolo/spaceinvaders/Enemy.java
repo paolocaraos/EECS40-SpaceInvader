@@ -3,7 +3,6 @@ package com.example.paolo.spaceinvaders;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 
 /**
  * Created by Paolo on 4/8/2016.
@@ -68,13 +67,11 @@ public class Enemy{
         if(isAlive) {
             //Check the state
             if (dropping == false){
-                Log.d("Log.DEBUG", "dropping = false");
                 if (x < 0) {
                     isOutOfBoundsLeft = true;
                     return DONE;
                 } else if (x > screen_X) {
                     isOutOfBoundsRight = true;
-                    Log.d("Log.DEBUG", "OutofBoundsRight = true");
                     return DONE;
                 }
             }
@@ -86,9 +83,8 @@ public class Enemy{
         return false;
     }
 
-    void update(){
+    void update(Player player){
         if(isAlive) {
-            Log.d("Log.DEBUG", "isOutOfBoundsRight = " + isOutOfBoundsRight + " isOutOfBoundsLeft = " + isOutOfBoundsLeft);
             if (isOutOfBoundsRight || isOutOfBoundsLeft) {
                 y = y + dy;
                 dropping = true;
@@ -97,11 +93,13 @@ public class Enemy{
             } else if (horizDirection == LEFT) {
                 x = x - dx;
             }
+            if (y > player.position_y - player.radius){
+                player.isAlive = false;
+            }
         }
     }
 
     boolean postUpdate() {
-        Log.d("Log.DEBUG", "PostUpdate starts.");
         if (isOutOfBoundsRight){
             isOutOfBoundsRight = false;
             isOutOfBoundsLeft = false;
