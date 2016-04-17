@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -23,7 +24,7 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
 
     private GameThread playerThread;
 
-    private Projectile[] playerBullet = new Projectile[10];
+    private Projectile[] playerBullet = new Projectile[30];
     private Projectile[] enemyBullet  = new Projectile[100];
     public final int DOWN = 1;
     public final int UP = -1;
@@ -69,9 +70,7 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
         //Update all elements
         player.update();
         for(int i = 0; i < playerBullet.length; i++) {
-            for(int j = 0; i < enemy.length; i++) {
-                playerBullet[i].update(enemy[j].getRect());
-            }
+            playerBullet[i].update(enemy[i].getRect());
         }
         for(int i = 0; i < enemy.length; i++){
             enemy[i].update();
@@ -92,9 +91,9 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
         this.moveControl_upperBound = (this.screen_height) / 3;
 
         playericon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        for(int i = 0; i < enemyicon.length; i++){
+        for(int i = 0; i < enemy.length; i++){
             enemyicon[i] = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-            enemy[i] = new Enemy(i, this.screen_width, this.screen_height, enemyicon[i]);
+            enemy[i] = new Enemy(i, this.screen_width, this.screen_height, enemyicon[i], enemy.length);
         }
         player = new Player(this.screen_width, this.screen_height, playericon);
         playerThread = new GameThread(this);

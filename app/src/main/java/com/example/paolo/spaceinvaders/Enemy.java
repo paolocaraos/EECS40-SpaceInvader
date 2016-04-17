@@ -32,15 +32,17 @@ public class Enemy{
 
     Bitmap enemyicon;
 
-    public Rect enemySpace = new Rect();
+    public Rect enemySpace =  new Rect();
 
-    public Enemy(int offset, int screenX, int screenY, Bitmap icon){
+    public Enemy(int offset, int screenX, int screenY, Bitmap icon, int enemyLength){
         isAlive = true;
 
-        x = 220 + 100*(offset % 5);
-        y = 220 + 100*(offset / 5);
+        dy = 2 * radius;
 
-        dy = 100;
+        int columns = enemyLength/4;
+
+        x = 220 + 100*(offset % columns);
+        y = 220 + 100*(offset / columns);
 
         screen_X = screenX;
         screen_Y = screenY;

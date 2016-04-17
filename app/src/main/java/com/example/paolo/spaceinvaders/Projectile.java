@@ -15,7 +15,7 @@ public class Projectile {
 
     public int trajectory;
 
-    public final int bulletSpeed = 60;
+    public final int bulletSpeed = 40;
     public boolean isActive;
     public final int bulletRadius = 20;
 
@@ -41,7 +41,7 @@ public class Projectile {
         }
     }
 
-    void update(Rect enemyRect){
+    void update(Rect targetRect){
         if(isActive){
             y = y + bulletSpeed * this.trajectory;
 
@@ -50,7 +50,7 @@ public class Projectile {
             if(y > screenUpperBound || y < screenLowerBound) {
                 isActive = false;
             }else{
-                bulletSpace.intersects(bulletSpace, enemyRect);
+                bulletSpace.intersects(bulletSpace, targetRect);
             }
         }
     }
