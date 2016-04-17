@@ -41,16 +41,22 @@ public class Projectile {
         }
     }
 
-    void update(Rect targetRect){
+    void update(Enemy[] enemies){
         if(isActive){
             y = y + bulletSpeed * this.trajectory;
 
             Log.d("Log.DEBUG", "screenLower = " + screenLowerBound + "bullet y position = " + y);
 
-            if(y > screenUpperBound || y < screenLowerBound) {
-                isActive = false;
-            }else{
-                bulletSpace.intersects(bulletSpace, targetRect);
+            for(int i = 0; i < enemies.length; i++) {
+                if (y > screenUpperBound || y < screenLowerBound) {
+                    isActive = false;
+                } else {
+                    if(bulletSpace.intersects(bulletSpace, enemies[i].getRect())){
+                        isActive = false;
+                        enemies[i].isAlive = false;
+                    }
+
+                }
             }
         }
     }

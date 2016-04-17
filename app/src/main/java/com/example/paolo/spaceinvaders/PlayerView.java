@@ -38,6 +38,8 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
 
     private volatile boolean stillPlaying;
 
+    public Rect[] enemyRect = new Rect[20];
+
     public PlayerView(Context context){
 
         super(context);
@@ -70,7 +72,7 @@ public class PlayerView extends SurfaceView implements SurfaceHolder.Callback{
         //Update all elements
         player.update();
         for(int i = 0; i < playerBullet.length; i++) {
-            playerBullet[i].update(enemy[i].getRect());
+            playerBullet[i].update(enemy);
         }
         for(int i = 0; i < enemy.length; i++){
             enemy[i].update();
